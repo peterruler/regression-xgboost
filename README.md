@@ -4,4 +4,4 @@
 - refined with google colab builtin gemini3 ai
 
 # demo
-![onrender wait appox. 2 minutes for the webapp](https://regression-xgboost.onrender.com)
+[onrender wait appox. 2 minutes for the webapp](https://regression-xgboost.onrender.com)
