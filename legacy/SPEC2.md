@@ -5,6 +5,6 @@ Then perform a regression with target column the selling_price
 use seaborn and matpoltlib to visualize scatterplot the data, show training error and training accuracy and confusion matrix on training data etc. use sklearn to train test split the data
 show a matplotlib diagram to show training loss and training accuracy of each training epoch
 Actions performed:
-- Created `automl/Cars.py` to load `PricePredictionCleanedUp.csv`, train an XGBoost regressor with `selling_price` as target, and report MAE/RMSE/R2.
-- Added seaborn/matplotlib plots: actual vs predicted scatter, training error/accuracy bar chart, and a binned confusion matrix saved to `automl/outputs/`.
-- Created `automl/Cars.ipynb` with the same workflow plus setup instructions using conda + `uv pip install`.
+- Created `Cars.py` to load `PricePredictionCleanedUp.csv`, train an XGBoost regressor with `selling_price` as target, and report MAE/RMSE/R2.
+- Added seaborn/matplotlib plots: actual vs predicted scatter, training error/accuracy bar chart, and a binned confusion matrix saved to `outputs/`.
+- Created `Cars.ipynb` with the same workflow plus setup instructions using conda + `uv pip install`.
