@@ -1,69 +1,64 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {% if model_error %}
-    <div class="flash error">{{ model_error }}</div>
-  {% endif %}
-
   {% if sample_options %}
-    <form class="sample-bar" method="get">
-      <div class="field">
-        <label for="sample">Sample car</label>
-        <select id="sample" name="sample">
-          {% for option in sample_options %}
-            <option value="{{ option.id }}" {% if option.id == current_sample_id %}selected{% endif %}>
-              {{ option.label }}
-            </option>
-          {% endfor %}
-        </select>
-      </div>
-      <button type="submit">Fill sample</button>
-      {% if default_sample_id %}
-        <a class="secondary" href="{{ url_for('index', sample=default_sample_id) }}">{{ default_sample_label }}</a>
-      {% endif %}
+    <form method="GET">
+      <label for="sample">Auto Prefill Samples</label>
+      <select name="sample" id="sample" onchange="this.form.submit()">
+        <option value="">Select a sample</option>
+        {% for option in sample_options %}
+          <option value="{{ option.id }}" {% if option.id == current_sample_id %}selected{% endif %}>
+            {{ option.label }}
+          </option>
+        {% endfor %}
+      </select>
     </form>
+    <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #e2e8f0;">
   {% endif %}
 
-  <form method="post" novalidate>
+  <form method="POST">
     {{ form.hidden_tag() }}
     <div class="grid">
-      {% for group in group_specs %}
-        {% set field = form[group.field_name] %}
-        <div class="field">
-          {{ field.label }}
-          {{ field() }}
+      {% for field in form if field.name not in ['csrf_token', 'submit'] %}
+        <div>
+          {% if field.type == 'BooleanField' %}
+            <label class="checkbox">
+              {{ field() }}
+              <span>{{ field.label.text }}</span>
+            </label>
+          {% else %}
+            <label for="{{ field.id }}">
+              {{ field.label.text }}
+              {% if field.name in ['min_cost_price', 'max_cost_price', 'selling_price'] %}
+                (CHF)
+              {% endif %}
+            </label>
+            {% if field.type in ['IntegerField', 'FloatField'] %}
+              {{ field(type="number", step=("1" if field.type == "IntegerField" else "any")) }}
+            {% else %}
+              {{ field() }}
+            {% endif %}
+          {% endif %}
           {% if field.errors %}
-            <div class="errors">{{ field.errors|join(", ") }}</div>
+            <div class="flash error">{{ field.errors[0] }}</div>
           {% endif %}
         </div>
-      {% endfor %}
-
-      {% for col, _field_type in feature_specs %}
-        {% set field = form[col] %}
-        {% if field.type == "BooleanField" %}
-          <div class="checkbox-field">
-            {{ field() }} {{ field.label.text }}
-          </div>
-        {% else %}
-          <div class="field">
-            {{ field.label }}
-            {{ field() }}
-            {% if field.errors %}
-              <div class="errors">{{ field.errors|join(", ") }}</div>
-            {% endif %}
-          </div>
-        {% endif %}
       {% endfor %}
     </div>
     <div class="actions">
       {{ form.submit() }}
-      <a class="secondary" href="{{ url_for('reset') }}">Reset</a>
+      <a href="{{ url_for('reset') }}">Reset</a>
     </div>
   </form>
 
   {% if prediction is not none %}
-    <div class="result">
-      Predicted selling price: {{ "%.2f"|format(prediction) }}
+    <div class="prediction">
+      Predicted selling price: CHF {{ "%.2f"|format(prediction) }}
     </div>
   {% endif %}
+
+  <div class="meta">
+    CSV schema: {{ schema_path or 'Unavailable' }}<br>
+    Model: {{ model_path }}
+  </div>
 {% endblock %}
