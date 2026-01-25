@@ -7,6 +7,10 @@ Original file is located at
     https://colab.research.google.com/drive/1XWuTeIBKUBkJWJePgw-9XWv0O5XShklj
 
 # Car Price Prediction (XGBoost Regression)
+
+# Google Colab Notebook
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1XWuTeIBKUBkJWJePgw-9XWv0O5XShklj#scrollTo=xRKjhM0W0fNx)
 """
 
 # Install xgboost if needed
